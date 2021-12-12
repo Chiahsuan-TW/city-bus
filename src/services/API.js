@@ -2,7 +2,7 @@ import axios from "axios";
 import jsSHA from "jssha";
 
 const API = axios.create({
-  baseURL: "https://ptx.transportdata.tw/MOTC/v2/Tourism",
+  baseURL: "https://ptx.transportdata.tw/MOTC/v2/Bus",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -37,4 +37,11 @@ function getAuthorizationHeader() {
   return { Authorization: Authorization, "X-Date": GMTString };
 }
 
-
+export default {
+  getRoutesByCity(city) {
+    return API.get(`/Route/City/${city}`, { params: { format: JSON } });
+  },
+  getStopsByCity(city) {
+    return API.get(`/Stop/City/${city}`, { params: { format: JSON } });
+  }
+};

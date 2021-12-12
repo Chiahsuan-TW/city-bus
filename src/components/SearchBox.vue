@@ -1,19 +1,33 @@
 <template>
   <div class="search">
     <div class="search-group">
-      <span class="return"></span>
-      <span class="search-city">台南</span>
+      <router-link :to="{ name: 'Home' }" class="return"></router-link>
+      <span class="search-city">{{ cityName }}</span>
     </div>
     <label for="">
-      <input type="text" placeholder="搜尋公車號" />
+      <input
+        type="text"
+        @input="passKeyword($event)"
+        placeholder="搜尋公車號"
+      />
     </label>
   </div>
 </template>
 
 <script>
 export default {
-
-}
+  props: {
+    cityName: {
+      type: String,
+      required: true,
+    },
+  },
+  methods: {
+    passKeyword($event) {
+      this.$emit("keyin", $event.target.value);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -23,6 +37,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 20px 20px;
+  margin-top: -8px;
+  background-color: #fff;
+  border-radius: 0 0 26px 26px;
 
   &-group {
     display: flex;

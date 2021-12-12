@@ -8,27 +8,32 @@
       <section class="bus">
         <div class="bus-title">
           <h4>找公車</h4>
-          <router-link :to="{name: 'About'}">
+          <a @click.prevent="getRoutes(cityName)" href="##">
             <img
               src="./../assets/images/arrow-right.png"
               alt="arrow to right"
             />
-          </router-link>
+          </a>
         </div>
         <div class="bus-city">
-          <CityCard v-for="city in cityList" :key="city.CityID" :city="city" />
+          <CityCard
+            :class="{ selected: cityName === city.CityName }"
+            v-for="city in cityList"
+            :key="city.CityID"
+            :city="city"
+          />
         </div>
       </section>
       <section>
         <div class="route">
           <div class="route-title">
             <h4>找站牌</h4>
-            <div>
+            <a @click.prevent="getStops(cityName)" href="##">
               <img
                 src="./../assets/images/arrow-right.png"
                 alt="arrow to right"
               />
-            </div>
+            </a>
           </div>
         </div>
       </section>
@@ -40,6 +45,7 @@
 import Navbar from "@/components/Navbar";
 import CityCard from "@/components/CityCard";
 import cityList from "./../../public/cities.json";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -51,6 +57,35 @@ export default {
     return {
       cityList,
     };
+  },
+  computed: {
+    ...mapGetters(["cityName"]),
+  },
+  methods: {
+    getRoutes(cityName) {
+      if (!cityName) {
+        alert("plz choose city first");
+        return;
+      }
+      this.$store.dispatch("searchRoutes");
+      this.$router.push({
+        name: "Search",
+        params: { city: cityName },
+        query: { type: "route" },
+      });
+    },
+    getStops(cityName) {
+      if (!cityName) {
+        alert("plz choose city first");
+        return;
+      }
+      this.$store.dispatch("searchStops");
+      this.$router.push({
+        name: "Search",
+        params: { city: cityName },
+        query: { type: "stop" },
+      });
+    },
   },
 };
 </script>
@@ -92,6 +127,7 @@ main {
 
     justify-items: center;
     margin-top: 35px;
+    padding-top: 10px;
     height: 50vh;
     overflow: scroll;
   }
@@ -116,5 +152,9 @@ section {
       }
     }
   }
+}
+
+.selected {
+  outline: 2px solid color.$indigo;
 }
 </style>

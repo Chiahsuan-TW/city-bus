@@ -1,6 +1,8 @@
 <template>
-  <div class="bus-city-card">
-    <div><img src="./../assets/images/bus.png" alt="bus icon" /></div>
+  <div @click="selectCity(city)" class="bus-city-card">
+    <div>
+      <img src="./../assets/images/bus.png" alt="bus icon" />
+    </div>
     <p class="bus-city-name">{{ city.CityName }}</p>
   </div>
 </template>
@@ -12,6 +14,14 @@ export default {
     city: {
       type: Object,
       required: true,
+    },
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    selectCity(city) {
+      this.$store.commit("setCity", city);
     },
   },
 };
@@ -27,6 +37,10 @@ export default {
   height: 120px;
   background-color: color.$primary;
   border-radius: 26px;
+}
+
+.bus-city-card:hover {
+  cursor: pointer;
 }
 
 .bus-city-name {
