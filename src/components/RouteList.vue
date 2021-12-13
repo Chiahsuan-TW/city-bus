@@ -1,15 +1,18 @@
 <template>
-  <div
-    v-for="route in getMatch(keyword)"
-    :key="route.RouteUID"
-    class="list-item"
-  >
-    <h5 class="list-title">{{ route.RouteName["Zh_tw"] }}</h5>
-    <div class="list-detail">
-      <span>{{ getDepartueDestination(route) }}</span>
-      <span>{{ getFirstLastTrip(route) }}</span>
+  <router-link :to="{ name: 'Sequence' }">
+    <div
+      @click="clickRoute(route)"
+      v-for="route in getMatch(keyword)"
+      :key="route.RouteUID"
+      class="list-item"
+    >
+      <h5 class="list-title">{{ route.RouteName["Zh_tw"] }}</h5>
+      <div class="list-detail">
+        <span>{{ getDepartueDestination(route) }}</span>
+        <span>{{ getFirstLastTrip(route) }}</span>
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -45,6 +48,10 @@ export default {
         route.RouteName["Zh_tw"].includes(keyword)
       );
       return results;
+    },
+    clickRoute(route) {
+      this.$store.dispatch("getRouteSequence", route);
+      this.$store.commit("setSelectedRoute", route);
     },
   },
   watch: {

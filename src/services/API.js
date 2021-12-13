@@ -43,5 +43,10 @@ export default {
   },
   getStopsByCity(city) {
     return API.get(`/Stop/City/${city}`, { params: { format: JSON } });
-  }
+  },
+  getRouteByName(city, routeName) {
+    return API.get(`StopOfRoute/City/${city}/${routeName}`, {
+      params: { format: JSON},
+    });
+  },
 };

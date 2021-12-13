@@ -12,6 +12,11 @@ const routes = [
     name: "Search",
     component: () => import("../views/Search.vue"),
   },
+  {
+    path: "/stop-sequence",
+    name: "Sequence",
+    component: () => import("../views/Sequence.vue"),
+  },
 ];
 
 const router = createRouter({

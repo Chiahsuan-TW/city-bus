@@ -6,6 +6,8 @@ export default createStore({
     slectedCity: {},
     cityRoutes: [],
     cityStops: [],
+    routeSequences: [],
+    selectedRoute: {},
     // isLoading: true,
   },
   getters: {
@@ -16,8 +18,39 @@ export default createStore({
         return state.selectedCity.CityName;
       }
     },
+    cityNameEn: (state) => {
+      if (!state.selectedCity) {
+        return;
+      } else {
+        return state.selectedCity.City;
+      }
+    },
     stopNames: (state) => {
       return state.cityStops.map((stop) => stop.StopName.Zh_tw);
+    },
+    departureRouteSequence: (state) => {
+      const directionCode = 0;
+      const result = state.routeSequences.filter(
+        (sequence) => sequence.Direction === directionCode
+      );
+      if (!result.length) {
+        return [];
+      } else {
+        const stops = result[0]["Stops"];
+        return stops;
+      }
+    },
+    returnRouteSequence: (state) => {
+      const directionCode = 1;
+      const result = state.routeSequences.filter(
+        (sequence) => sequence.Direction === directionCode
+      );
+      if (!result.length) {
+        return [];
+      } else {
+        const stops = result[0]["Stops"];
+        return stops;
+      }
     },
   },
   mutations: {
@@ -26,6 +59,12 @@ export default createStore({
     },
     toggleLoading(state) {
       state.isLoading = !state.isLoading;
+    },
+    setRouteSequences(state, sequence) {
+      state.routeSequences = sequence;
+    },
+    setSelectedRoute(state, route) {
+      state.selectedRoute = route;
     },
   },
   actions: {
@@ -42,6 +81,20 @@ export default createStore({
       console.log("stop", data);
       state.cityStops = data;
       // commit("toggleLoading");
+    },
+    async getRouteSequence({ getters, commit }, route) {
+      const city = getters.cityNameEn;
+      const routeName = route.RouteName["Zh_tw"];
+      const { data } = await API.getRouteByName(city, routeName);
+      if (data.length > 2) {
+        const exactRoute = data.filter(
+          (datum) => datum.RouteName["Zh_tw"] === routeName
+        );
+        commit("setRouteSequences", exactRoute);
+      } else {
+        // console.log("route", data);
+        commit("setRouteSequences", data);
+      }
     },
   },
   modules: {},
