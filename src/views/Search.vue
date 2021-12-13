@@ -4,13 +4,18 @@
       <Navbar />
     </header>
     <main>
-      <SearchBox :cityName="cityName" @keyin="receiveKeyword" />
+      <SearchBox
+        :cityName="cityName"
+        :keyword="keyword"
+        @keyin="receiveKeyword"
+      />
       <section class="list">
         <component :is="currentComponent" :keyword="keyword"></component>
       </section>
-      <section class="keyboard">
+      <section v-show="currentComponent === routeList" class="keyboard">
         <div class="keyboard-route">
           <button
+            @click="keyword += route"
             v-for="(route, index) in routeCodes"
             :key="index"
             type="button"
@@ -20,13 +25,14 @@
         </div>
         <div class="keyboard-dial">
           <button
+            @click="keyword += digit"
             v-for="(digit, index) in dialDigits"
             :key="index"
             type="button"
           >
             {{ digit }}
           </button>
-          <button type="button">清除</button>
+          <button @click="removeLast" type="button">清除</button>
         </div>
       </section>
     </main>
@@ -72,6 +78,10 @@ export default {
   methods: {
     receiveKeyword(keyword) {
       this.keyword = keyword;
+    },
+    removeLast() {
+      if (!this.keyword) return;
+      this.keyword = this.keyword.slice(0, -1);
     },
   },
   created() {
@@ -140,8 +150,6 @@ main {
   &-dial button:last-child {
     grid-column: span 3;
   }
-
-  
 }
 
 /* list item */

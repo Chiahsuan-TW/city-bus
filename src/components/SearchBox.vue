@@ -7,6 +7,7 @@
     <label for="">
       <input
         type="text"
+        :value="keyword"
         @input="passKeyword($event)"
         placeholder="搜尋公車號"
       />
@@ -20,6 +21,9 @@ export default {
     cityName: {
       type: String,
       required: true,
+    },
+    keyword: {
+      type: String,
     },
   },
   methods: {
