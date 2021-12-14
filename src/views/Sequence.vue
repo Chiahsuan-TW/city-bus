@@ -7,7 +7,7 @@
       <section class="basic-info">
         <div class="wrapper">
           <div class="city-route">
-            <div class="return">
+            <div class="return" @click="this.$router.go(-1)">
               <img
                 src="./../assets/images/arrow-left.png"
                 alt="arrow pointing to the left"
@@ -44,23 +44,50 @@
         <div class="route-sequence-list">
           <div
             v-show="currentTab === 'departure'"
-            v-for="(stop, index) in departureRouteSequence"
+            v-for="(stop, index) in depatureDataset"
             :key="index"
             class="route-sequence-list-item"
           >
-            <span class="status">尚未發車</span>
+            <span
+              :class="[
+                'status',
+                {
+                  approaching: getWaitingMinute(stop.ETA) === 0,
+                  soon:
+                    getWaitingMinute(stop.ETA) < 2 &&
+                    getWaitingMinute(stop.ETA) > 0,
+                  waiting:
+                    stop.StopStatus === 0 && getWaitingMinute(stop.ETA) >= 2,
+                  'out-of-service': stop.StopStatus !== 0,
+                },
+              ]"
+            >
+              {{ getCurrentStopStatus(stop) }}</span
+            >
             <span class="stop">{{ stop.StopName["Zh_tw"] }}</span>
-            <span>{{ stop.StopSequence }}</span>
           </div>
           <div
             v-show="currentTab === 'return'"
-            v-for="(stop, index) in returnRouteSequence"
+            v-for="(stop, index) in returnDataset"
             :key="index"
             class="route-sequence-list-item"
           >
-            <span class="status">尚未發車</span>
+            <span
+              :class="[
+                'status',
+                {
+                  approaching: getWaitingMinute(stop.ETA) === 0,
+                  soon:
+                    getWaitingMinute(stop.ETA) < 2 &&
+                    getWaitingMinute(stop.ETA) > 0,
+                  waiting:
+                    stop.StopStatus === 0 && getWaitingMinute(stop.ETA) >= 2,
+                  'out-of-service': stop.StopStatus !== 0,
+                },
+              ]"
+              >{{ getCurrentStopStatus(stop) }}</span
+            >
             <span class="stop">{{ stop.StopName["Zh_tw"] }}</span>
-            <span>{{ stop.StopSequence }}</span>
           </div>
         </div>
       </section>
@@ -84,12 +111,89 @@ export default {
     };
   },
   computed: {
-    ...mapState(["selectedRoute"]),
+    ...mapState(["selectedRoute", "timeOfArrival"]),
     ...mapGetters([
       "departureRouteSequence",
       "returnRouteSequence",
       "cityName",
     ]),
+    depatureDataset() {
+      // let organized = [];
+      // this.departureRouteSequence.forEach((stop) => {
+      //   this.timeOfArrival.forEach((item) => {
+      // console.log(stop.StopUID === item.StopUID);
+      //     if (stop.StopUID === item.StopUID) {
+      //       organized.push({
+      //         ...stop,
+      //         StopStatus: item.StopStatus,
+      //         ETA: item.EstimateTime,
+      //       });
+      //       return;
+      //     }
+      //   });
+      // });
+      let organized = this.departureRouteSequence.map((stop) => {
+        const matching = this.timeOfArrival.filter(
+          (item) => stop.StopUID === item.StopUID
+        )[0];
+
+        return {
+          ...stop,
+          StopStatus: matching.StopStatus,
+          ETA: matching.EstimateTime,
+          // ...matching,
+        };
+      });
+
+      return organized;
+    },
+    returnDataset() {
+      let organized = this.returnRouteSequence.map((stop) => {
+        const matching = this.timeOfArrival.filter(
+          (item) => stop.StopUID === item.StopUID
+        )[0];
+
+        return {
+          ...stop,
+          StopStatus: matching.StopStatus,
+          ETA: matching.EstimateTime,
+          // ...matching,
+        };
+      });
+
+      return organized;
+    },
+  },
+  methods: {
+    getWaitingMinute(time) {
+      return Math.floor(time / 60);
+    },
+    getWaitingNotice(minute) {
+      if (minute === 0) {
+        return "進站中";
+      } else if (minute > 0 && minute < 2) {
+        return "即將進站";
+      } else {
+        return `${minute}分鐘`;
+      }
+    },
+    busStatus(code) {
+      const status = {
+        1: "尚未發車",
+        2: "交管不停靠",
+        3: "末班車已過",
+        4: "今日未發車",
+      };
+      return status[code];
+    },
+    getCurrentStopStatus(stop) {
+      if (stop.StopStatus === 0) {
+        const watingMinute = this.getWaitingMinute(stop.ETA);
+        return this.getWaitingNotice(watingMinute);
+      } else {
+        return this.busStatus(stop.StopStatus);
+      }
+    },
   },
 };
 </script>
@@ -111,6 +215,10 @@ main {
     display: flex;
     align-items: center;
     font-size: 0;
+  }
+
+  .return:hover {
+    cursor: pointer;
   }
 
   span {
@@ -184,6 +292,28 @@ main {
     background: rgba(255, 255, 255, 0.6);
     border-radius: 10px;
     margin-top: 10px;
+    box-shadow: 0px 4px 10px rgba(19, 23, 20, 0.15);
+  }
+
+  .status {
+    padding: 5px 15px 5px 9px;
+    border-radius: 6px 30px 30px 6px;
+  }
+
+  .out-of-service {
+    background-color: #aeb2b0;
+  }
+
+  .approaching {
+    background-color: color.$orange;
+  }
+
+  .soon {
+    background-color: color.$yellow;
+  }
+
+  .waiting {
+    background-color: color.$skyblue;
   }
 }
 </style>

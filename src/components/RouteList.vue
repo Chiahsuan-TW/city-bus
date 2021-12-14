@@ -51,6 +51,7 @@ export default {
     },
     clickRoute(route) {
       this.$store.dispatch("getRouteSequence", route);
+      this.$store.dispatch("getTimeOfArrival", route);
       this.$store.commit("setSelectedRoute", route);
     },
   },

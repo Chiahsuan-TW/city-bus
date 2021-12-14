@@ -8,6 +8,7 @@ export default createStore({
     cityStops: [],
     routeSequences: [],
     selectedRoute: {},
+    timeOfArrival: [],
     // isLoading: true,
   },
   getters: {
@@ -37,6 +38,7 @@ export default createStore({
         return [];
       } else {
         const stops = result[0]["Stops"];
+        console.log("DEPART ROUTE", stops);
         return stops;
       }
     },
@@ -49,6 +51,7 @@ export default createStore({
         return [];
       } else {
         const stops = result[0]["Stops"];
+        console.log("RETURN ROUTE", stops);
         return stops;
       }
     },
@@ -71,14 +74,12 @@ export default createStore({
     async searchRoutes({ state }) {
       const city = state.selectedCity.City;
       const { data } = await API.getRoutesByCity(city);
-      console.log("routes", data);
       state.cityRoutes = data;
       // commit("toggleLoading");
     },
     async searchStops({ state }) {
       const city = state.selectedCity.City;
       const { data } = await API.getStopsByCity(city);
-      console.log("stop", data);
       state.cityStops = data;
       // commit("toggleLoading");
     },
@@ -95,6 +96,12 @@ export default createStore({
         // console.log("route", data);
         commit("setRouteSequences", data);
       }
+    },
+    async getTimeOfArrival({ state, getters }, route) {
+      const city = getters.cityNameEn;
+      const routeName = route.RouteName["Zh_tw"];
+      const { data } = await API.getTimeOfArrival(city, routeName);
+      state.timeOfArrival = data;
     },
   },
   modules: {},

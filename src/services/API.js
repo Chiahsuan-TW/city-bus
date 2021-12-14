@@ -46,7 +46,14 @@ export default {
   },
   getRouteByName(city, routeName) {
     return API.get(`StopOfRoute/City/${city}/${routeName}`, {
-      params: { format: JSON},
+      params: { format: JSON },
+    });
+  },
+  getTimeOfArrival(city, routeName) {
+    return API.get(`/EstimatedTimeOfArrival/City/${city}/${routeName}`, {
+      params: {
+        format: JSON,
+      },
     });
   },
 };
