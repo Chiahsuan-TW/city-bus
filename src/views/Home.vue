@@ -79,7 +79,7 @@ export default {
         alert("plz choose city first");
         return;
       }
-      this.$store.dispatch("searchStops");
+      this.$store.dispatch("searchStations");
       this.$router.push({
         name: "Search",
         params: { city: cityName },

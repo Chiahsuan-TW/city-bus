@@ -1,9 +1,15 @@
 <template>
-  <div v-for="(stopName, index) in filter" :key="index" class="list-item">
-    <h5 class="list-title">{{ stopName }}</h5>
+  <div
+    @click="clickStop(stop)"
+    v-for="(stop, index) in filterStops"
+    :key="index"
+    class="list-item"
+  >
+    <h5 class="list-title">{{ stop.StationName }}</h5>
     <div class="list-detail">
       <span>{{ cityName }}</span>
     </div>
+    <!-- <pre>{{ stop }}</pre> -->
   </div>
 </template>
 
@@ -19,12 +25,20 @@ export default {
     },
   },
   computed: {
-    ...mapState(["cityRoutes"]),
-    ...mapGetters(["cityName", "stopNames"]),
-    filter() {
-      return this.stopNames.filter((stopName) =>
-        stopName.includes(this.keyword)
+    ...mapState(["cityRoutes", "cityStops"]),
+    ...mapGetters(["cityName", "stops"]),
+    filterStops() {
+      return this.stops.filter((stop) =>
+        stop.StationName.includes(this.keyword)
       );
+    },
+  },
+  methods: {
+    clickStop(stop) {
+      console.log("payload", stop);
+      this.$store.dispatch("getRoutesStops", stop);
+      this.$store.dispatch("searchRoutes");
+      this.$router.push({ name: "Stop", params: { stopUID: stop.StationUID } });
     },
   },
 };

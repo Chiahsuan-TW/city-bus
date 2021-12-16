@@ -194,6 +194,17 @@ export default {
         return this.busStatus(stop.StopStatus);
       }
     },
+    timer() {
+      let timerSeconds = 60;
+      const clearID = window.setInterval(() => {
+        timerSeconds--;
+      }, 1000);
+
+      if (timerSeconds === 0) {
+        clearInterval(clearID);
+        return this.timer;
+      }
+    },
   },
 };
 </script>
@@ -300,10 +311,6 @@ main {
     border-radius: 6px 30px 30px 6px;
   }
 
-  .out-of-service {
-    background-color: #aeb2b0;
-  }
-
   .approaching {
     background-color: color.$orange;
   }
@@ -314,6 +321,9 @@ main {
 
   .waiting {
     background-color: color.$skyblue;
+  }
+  .out-of-service {
+    background-color: #aeb2b0;
   }
 }
 </style>

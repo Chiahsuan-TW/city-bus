@@ -5,11 +5,12 @@ export default createStore({
   state: {
     slectedCity: {},
     cityRoutes: [],
+    cityRoutesStops: [],
     cityStops: [],
     routeSequences: [],
     selectedRoute: {},
+    selectedStop: {},
     timeOfArrival: [],
-    // isLoading: true,
   },
   getters: {
     cityName: (state) => {
@@ -26,8 +27,13 @@ export default createStore({
         return state.selectedCity.City;
       }
     },
-    stopNames: (state) => {
-      return state.cityStops.map((stop) => stop.StopName.Zh_tw);
+    stops: (state) => {
+      return state.cityStops.map((stop) => {
+        return {
+          ...stop,
+          StationName: stop.StationName.Zh_tw,
+        };
+      });
     },
     departureRouteSequence: (state) => {
       const directionCode = 0;
@@ -60,14 +66,14 @@ export default createStore({
     setCity(state, city) {
       state.selectedCity = city;
     },
-    toggleLoading(state) {
-      state.isLoading = !state.isLoading;
-    },
     setRouteSequences(state, sequence) {
       state.routeSequences = sequence;
     },
     setSelectedRoute(state, route) {
       state.selectedRoute = route;
+    },
+    setSelectedStop(state, stop) {
+      state.selectedStop = stop;
     },
   },
   actions: {
@@ -75,13 +81,12 @@ export default createStore({
       const city = state.selectedCity.City;
       const { data } = await API.getRoutesByCity(city);
       state.cityRoutes = data;
-      // commit("toggleLoading");
     },
-    async searchStops({ state }) {
+    async searchStations({ state }) {
       const city = state.selectedCity.City;
-      const { data } = await API.getStopsByCity(city);
+      const { data } = await API.getStationsByCity(city);
       state.cityStops = data;
-      // commit("toggleLoading");
+      console.log("FFFFF-----Station", data);
     },
     async getRouteSequence({ getters, commit }, route) {
       const city = getters.cityNameEn;
@@ -93,7 +98,6 @@ export default createStore({
         );
         commit("setRouteSequences", exactRoute);
       } else {
-        // console.log("route", data);
         commit("setRouteSequences", data);
       }
     },
@@ -102,6 +106,14 @@ export default createStore({
       const routeName = route.RouteName["Zh_tw"];
       const { data } = await API.getTimeOfArrival(city, routeName);
       state.timeOfArrival = data;
+    },
+    //取得含有停靠站資訊的所有路線
+    async getRoutesStops({ state, getters, commit }, stop) {
+      const city = getters.cityNameEn;
+      const { data } = await API.getRoutesStops(city);
+      state.cityRoutesStops = data;
+      console.log("含有停靠站資訊的所有路線", data);
+      commit("setSelectedStop", stop);
     },
   },
   modules: {},

@@ -41,8 +41,11 @@ export default {
   getRoutesByCity(city) {
     return API.get(`/Route/City/${city}`, { params: { format: JSON } });
   },
-  getStopsByCity(city) {
-    return API.get(`/Stop/City/${city}`, { params: { format: JSON } });
+  getStationsByCity(city) {
+    return API.get(`/Station/City/${city}`, { params: { format: JSON } });
+  },
+  getRoutesStops(city) {
+    return API.get(`/StopOfRoute/City/${city}`, { params: { format: JSON } });
   },
   getRouteByName(city, routeName) {
     return API.get(`StopOfRoute/City/${city}/${routeName}`, {

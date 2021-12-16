@@ -17,6 +17,11 @@ const routes = [
     name: "Sequence",
     component: () => import("../views/Sequence.vue"),
   },
+  {
+    path: "/stop/:stopUID",
+    name: "Stop",
+    component: () => import("../views/Stop.vue"),
+  },
 ];
 
 const router = createRouter({
