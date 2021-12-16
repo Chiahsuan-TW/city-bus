@@ -136,7 +136,7 @@ export default {
         const matching = this.timeOfArrival.filter(
           (item) => stop.StopUID === item.StopUID
         )[0];
-
+        // console.log("matching--------------", matching);
         return {
           ...stop,
           StopStatus: matching.StopStatus,

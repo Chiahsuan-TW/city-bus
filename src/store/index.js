@@ -44,7 +44,6 @@ export default createStore({
         return [];
       } else {
         const stops = result[0]["Stops"];
-        console.log("DEPART ROUTE", stops);
         return stops;
       }
     },
@@ -57,7 +56,6 @@ export default createStore({
         return [];
       } else {
         const stops = result[0]["Stops"];
-        console.log("RETURN ROUTE", stops);
         return stops;
       }
     },
@@ -86,7 +84,7 @@ export default createStore({
       const city = state.selectedCity.City;
       const { data } = await API.getStationsByCity(city);
       state.cityStops = data;
-      console.log("FFFFF-----Station", data);
+      // console.log("FFFFF-----Station", data);
     },
     async getRouteSequence({ getters, commit }, route) {
       const city = getters.cityNameEn;
@@ -107,14 +105,20 @@ export default createStore({
       const { data } = await API.getTimeOfArrival(city, routeName);
       state.timeOfArrival = data;
     },
-    //取得含有停靠站資訊的所有路線
-    async getRoutesStops({ state, getters, commit }, stop) {
+    async getRoute({ getters, commit }, route) {
       const city = getters.cityNameEn;
-      const { data } = await API.getRoutesStops(city);
-      state.cityRoutesStops = data;
-      console.log("含有停靠站資訊的所有路線", data);
-      commit("setSelectedStop", stop);
+      const routeName = route.RouteName["Zh_tw"];
+      const { data } = await API.getRoute(city, routeName);
+      commit("setSelectedRoute", data[0]);
     },
+    //取得含有停靠站資訊的所有路線
+    // async getRoutesStops({ state, getters, commit }, stop) {
+    //   const city = getters.cityNameEn;
+    //   const { data } = await API.getRoutesStops(city);
+    //   state.cityRoutesStops = data;
+    //   console.log("含有停靠站資訊的所有路線", data);
+    //   commit("setSelectedStop", stop);
+    // },
   },
   modules: {},
 });

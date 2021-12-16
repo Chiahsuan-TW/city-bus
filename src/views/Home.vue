@@ -79,6 +79,10 @@ export default {
         alert("plz choose city first");
         return;
       }
+      if (cityName === "基隆市" || cityName === "連江縣") {
+        alert("oops! no such info for the selected city");
+        return;
+      }
       this.$store.dispatch("searchStations");
       this.$router.push({
         name: "Search",

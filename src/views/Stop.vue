@@ -21,12 +21,12 @@
           <button class="router-detail">分享頁面</button>
         </div>
       </section>
-      <section>
+      <section class="routes">
         <!--copy routelist's html-->
         <router-link :to="{ name: 'Sequence' }">
           <div
             @click="clickRoute(route)"
-            v-for="route in routeChoices"
+            v-for="route in selectedStop.Stops"
             :key="route.RouteUID"
             class="list-item"
           >
@@ -61,13 +61,10 @@ export default {
     },
   },
   methods: {
-    routes() {
-      this.selectedStop.Stops;
-    },
     clickRoute(route) {
       this.$store.dispatch("getRouteSequence", route);
       this.$store.dispatch("getTimeOfArrival", route);
-      this.$store.commit("setSelectedRoute", route);
+      this.$store.dispatch("getRoute", route);
     },
   },
 };
@@ -77,6 +74,7 @@ export default {
 main {
   background: linear-gradient(143.04deg, #70ebb0 13.42%, #40caca 84.3%);
   height: 92vh;
+  overflow: scroll;
 }
 
 .basic-info {
@@ -127,6 +125,10 @@ main {
     padding: 4px 10px;
     border-radius: 40px;
   }
+}
+
+.routes {
+  padding: 0 20px 20px;
 }
 
 .list {
