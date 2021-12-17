@@ -73,6 +73,18 @@ export default createStore({
     setSelectedStop(state, stop) {
       state.selectedStop = stop;
     },
+    resetCityStop(state) {
+      state.cityStops = [];
+    },
+    resetCityRoutes(state) {
+      state.CityRoutes = [];
+    },
+    resetRouteSequence(state) {
+      state.routeSequences = [];
+    },
+    resetSelectedStop(state) {
+      state.selectedStop = {};
+    },
   },
   actions: {
     async searchRoutes({ state }) {
@@ -84,7 +96,6 @@ export default createStore({
       const city = state.selectedCity.City;
       const { data } = await API.getStationsByCity(city);
       state.cityStops = data;
-      // console.log("FFFFF-----Station", data);
     },
     async getRouteSequence({ getters, commit }, route) {
       const city = getters.cityNameEn;

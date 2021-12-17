@@ -17,7 +17,7 @@
               >{{ cityName }}｜ {{ selectedRoute.RouteName.Zh_tw }} 公車</span
             >
           </div>
-          <span>XX秒後更新</span>
+          <!-- <span>XX秒後更新</span> -->
         </div>
         <div class="wrapper">
           <h2>
@@ -118,20 +118,6 @@ export default {
       "cityName",
     ]),
     depatureDataset() {
-      // let organized = [];
-      // this.departureRouteSequence.forEach((stop) => {
-      //   this.timeOfArrival.forEach((item) => {
-      // console.log(stop.StopUID === item.StopUID);
-      //     if (stop.StopUID === item.StopUID) {
-      //       organized.push({
-      //         ...stop,
-      //         StopStatus: item.StopStatus,
-      //         ETA: item.EstimateTime,
-      //       });
-      //       return;
-      //     }
-      //   });
-      // });
       let organized = this.departureRouteSequence.map((stop) => {
         const matching = this.timeOfArrival.filter(
           (item) => stop.StopUID === item.StopUID
@@ -233,7 +219,8 @@ main {
   }
 
   span {
-    font-size: 12px;
+    font-size: 14px;
+    text-shadow: 1px 0px 2px color.$secondary;
     color: #fff;
   }
 
@@ -244,9 +231,11 @@ main {
     color: color.$secondary;
 
     span {
+      margin-left: 5px;
       color: inherit;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: normal;
+      text-shadow: none;
     }
   }
 

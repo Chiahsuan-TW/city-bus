@@ -51,6 +51,7 @@ export default {
       return results;
     },
     clickRoute(route) {
+      this.$store.commit("resetRouteSequence");
       this.$store.dispatch("getRouteSequence", route);
       this.$store.dispatch("getTimeOfArrival", route);
       this.$store.commit("setSelectedRoute", route);
@@ -58,6 +59,7 @@ export default {
   },
   watch: {
     keyword: function (newValue) {
+      console.log(newValue);
       this.getMatch(newValue);
     },
   },

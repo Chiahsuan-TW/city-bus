@@ -67,6 +67,7 @@ export default {
         alert("plz choose city first");
         return;
       }
+      this.$store.commit("resetCityRoutes");
       this.$store.dispatch("searchRoutes");
       this.$router.push({
         name: "Search",
@@ -83,6 +84,8 @@ export default {
         alert("oops! no such info for the selected city");
         return;
       }
+      // manually clear the previous data
+      this.$store.commit("resetCityStop");
       this.$store.dispatch("searchStations");
       this.$router.push({
         name: "Search",

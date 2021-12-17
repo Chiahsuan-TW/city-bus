@@ -7,7 +7,7 @@
       <section class="basic-info">
         <div class="wrapper">
           <div class="city-route">
-            <div class="return" @click="this.$router.go(-1)">
+            <div class="return" @click="clickReturn">
               <img
                 src="./../assets/images/arrow-left.png"
                 alt="arrow pointing to the left"
@@ -44,14 +44,12 @@
 
 <script>
 import Navbar from "@/components/Navbar";
-// import RouteList from "@/components/RouteList";
 import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "Stop",
   components: {
     Navbar,
-    // RouteList,
   },
   computed: {
     ...mapState(["selectedStop", "cityStops"]),
@@ -65,6 +63,16 @@ export default {
       this.$store.dispatch("getRouteSequence", route);
       this.$store.dispatch("getTimeOfArrival", route);
       this.$store.dispatch("getRoute", route);
+    },
+    clickReturn() {
+      this.$router.go(-1);
+      this.$store.commit("resetRouteSequence");
+      this.$store.commit("resetSelectedStop");
+    },
+    created() {
+      console.log("YOYOYIOY");
+      this.$store.commit("resetRouteSequence");
+      this.$store.commit("resetSelectedStop");
     },
   },
 };
