@@ -69,11 +69,24 @@ export default {
       this.$store.commit("resetRouteSequence");
       this.$store.commit("resetSelectedStop");
     },
-    created() {
-      console.log("YOYOYIOY");
-      this.$store.commit("resetRouteSequence");
-      this.$store.commit("resetSelectedStop");
+    getDepartueDestination(route) {
+      const departure = route.DepartureStopNameZh;
+      const destination = route.DestinationStopNameZh;
+      return `${departure} - ${destination}`;
     },
+    getFirstLastTrip(route) {
+      if (!route.SubRoutes[0].FirstBusTime) {
+        return "未提供起迄時間";
+      } else {
+        const first = route.SubRoutes[0].FirstBusTime;
+        const last = route.SubRoutes[0].LastBusTime;
+        return `${first} - ${last}`;
+      }
+    },
+  },
+  created() {
+    this.$store.commit("resetRouteSequence");
+    this.$store.commit("resetSelectedRoute");
   },
 };
 </script>

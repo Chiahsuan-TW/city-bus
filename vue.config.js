@@ -13,7 +13,7 @@ module.exports = {
     devServer: {
       watchOptions: {
         ignored: /node_modules/,
-        poll: 1000,
+        poll: 3000,
       },
     },
   },

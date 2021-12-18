@@ -35,7 +35,6 @@ export default {
   },
   methods: {
     clickStop(stop) {
-      // this.$store.dispatch("getRoutesStops", stop);
       this.$store.dispatch("searchRoutes");
       this.$store.commit("setSelectedStop", stop);
       this.$router.push({ name: "Stop", params: { stopUID: stop.StationUID } });

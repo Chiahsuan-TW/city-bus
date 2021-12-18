@@ -17,7 +17,7 @@
               >{{ cityName }}｜ {{ selectedRoute.RouteName.Zh_tw }} 公車</span
             >
           </div>
-          <!-- <span>XX秒後更新</span> -->
+          <span>{{ timerSeconds }}秒後更新</span>
         </div>
         <div class="wrapper">
           <h2>
@@ -108,6 +108,8 @@ export default {
   data() {
     return {
       currentTab: "departure",
+      timerSeconds: 60,
+      clearID: null,
     };
   },
   computed: {
@@ -180,17 +182,26 @@ export default {
         return this.busStatus(stop.StopStatus);
       }
     },
-    timer() {
-      let timerSeconds = 60;
-      const clearID = window.setInterval(() => {
-        timerSeconds--;
+    updateBusStatus() {
+      this.clearID = window.setInterval(() => {
+        this.timerSeconds--;
+        if (this.timerSeconds === 0) {
+          clearInterval(this.clearID);
+          this.$store.dispatch("getTimeOfArrival", this.selectedRoute);
+          this.timerSeconds = 60;
+          return this.updateBusStatus();
+        }
       }, 1000);
-
-      if (timerSeconds === 0) {
-        clearInterval(clearID);
-        return this.timer;
-      }
     },
+    stopUpdate() {
+      clearInterval(this.clearID);
+    },
+  },
+  created() {
+    this.updateBusStatus();
+  },
+  unmounted() {
+    this.stopUpdate();
   },
 };
 </script>

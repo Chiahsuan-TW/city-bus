@@ -85,6 +85,9 @@ export default createStore({
     resetSelectedStop(state) {
       state.selectedStop = {};
     },
+    resetSelectedRoute(state) {
+      state.selectedRoute = {};
+    },
   },
   actions: {
     async searchRoutes({ state }) {
@@ -111,6 +114,7 @@ export default createStore({
       }
     },
     async getTimeOfArrival({ state, getters }, route) {
+      console.log("GOTCHA");
       const city = getters.cityNameEn;
       const routeName = route.RouteName["Zh_tw"];
       const { data } = await API.getTimeOfArrival(city, routeName);
