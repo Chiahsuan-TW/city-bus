@@ -10,6 +10,7 @@
         @keyin="receiveKeyword"
       />
       <section class="list">
+        <Spinner v-if="isLoading" />
         <component :is="currentComponent" :keyword="keyword"></component>
       </section>
       <section v-show="currentComponent === routeList" class="keyboard">
@@ -42,9 +43,10 @@
 <script>
 import Navbar from "@/components/Navbar";
 import SearchBox from "@/components/SearchBox";
+import Spinner from "@/components/Spinner";
 // import RouteList from "@/components/RouteList";
 // import StopList from "@/components/StopList";
-// import { mapState } from "vuex";
+import { mapState } from "vuex";
 import { mapGetters } from "vuex";
 import { defineAsyncComponent } from "vue";
 import { markRaw } from "vue";
@@ -54,6 +56,7 @@ export default {
   components: {
     Navbar,
     SearchBox,
+    Spinner,
     // RouteList,
     // StopList,
   },
@@ -72,7 +75,7 @@ export default {
     };
   },
   computed: {
-    // ...mapState(["isLoading"]),
+    ...mapState(["isLoading"]),
     ...mapGetters(["cityName", "stopNames"]),
   },
   methods: {

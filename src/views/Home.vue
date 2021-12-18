@@ -109,6 +109,24 @@ main {
     font-size: 28px;
     color: #fff;
   }
+
+  a {
+    animation: move 0.6s infinite;
+    animation-direction: alternate;
+    position: relative;
+  }
+
+  @keyframes move {
+    0% {
+      left: -5px;
+    }
+    50% {
+      left: 0px;
+    }
+    100% {
+      left: 7px;
+    }
+  }
 }
 
 .bus {

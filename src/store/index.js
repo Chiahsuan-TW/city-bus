@@ -11,6 +11,7 @@ export default createStore({
     selectedRoute: {},
     selectedStop: {},
     timeOfArrival: [],
+    isLoading: undefined,
   },
   getters: {
     cityName: (state) => {
@@ -88,19 +89,27 @@ export default createStore({
     resetSelectedRoute(state) {
       state.selectedRoute = {};
     },
+    changeLoadingStatus(state, status) {
+      state.isLoading = status;
+    },
   },
   actions: {
-    async searchRoutes({ state }) {
+    async searchRoutes({ state, commit }) {
+      commit("changeLoadingStatus", true);
       const city = state.selectedCity.City;
       const { data } = await API.getRoutesByCity(city);
       state.cityRoutes = data;
+      commit("changeLoadingStatus", false);
     },
-    async searchStations({ state }) {
+    async searchStations({ state, commit }) {
+      commit("changeLoadingStatus", true);
       const city = state.selectedCity.City;
       const { data } = await API.getStationsByCity(city);
       state.cityStops = data;
+      commit("changeLoadingStatus", false);
     },
     async getRouteSequence({ getters, commit }, route) {
+      commit("changeLoadingStatus", true);
       const city = getters.cityNameEn;
       const routeName = route.RouteName["Zh_tw"];
       const { data } = await API.getRouteByName(city, routeName);
@@ -109,31 +118,28 @@ export default createStore({
           (datum) => datum.RouteName["Zh_tw"] === routeName
         );
         commit("setRouteSequences", exactRoute);
+        commit("changeLoadingStatus", false);
       } else {
         commit("setRouteSequences", data);
+        commit("changeLoadingStatus", false);
       }
     },
-    async getTimeOfArrival({ state, getters }, route) {
-      console.log("GOTCHA");
+    async getTimeOfArrival({ state, getters, commit }, route) {
+      commit("changeLoadingStatus", true);
       const city = getters.cityNameEn;
       const routeName = route.RouteName["Zh_tw"];
       const { data } = await API.getTimeOfArrival(city, routeName);
       state.timeOfArrival = data;
+      commit("changeLoadingStatus", false);
     },
     async getRoute({ getters, commit }, route) {
+      commit("changeLoadingStatus", true);
       const city = getters.cityNameEn;
       const routeName = route.RouteName["Zh_tw"];
       const { data } = await API.getRoute(city, routeName);
       commit("setSelectedRoute", data[0]);
+      commit("changeLoadingStatus", false);
     },
-    //取得含有停靠站資訊的所有路線
-    // async getRoutesStops({ state, getters, commit }, stop) {
-    //   const city = getters.cityNameEn;
-    //   const { data } = await API.getRoutesStops(city);
-    //   state.cityRoutesStops = data;
-    //   console.log("含有停靠站資訊的所有路線", data);
-    //   commit("setSelectedStop", stop);
-    // },
   },
   modules: {},
 });

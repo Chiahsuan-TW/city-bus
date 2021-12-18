@@ -42,6 +42,7 @@
           </div>
         </div>
         <div class="route-sequence-list">
+          <Spinner v-if="isLoading" />
           <div
             v-show="currentTab === 'departure'"
             v-for="(stop, index) in depatureDataset"
@@ -97,6 +98,7 @@
 
 <script>
 import Navbar from "@/components/Navbar";
+import Spinner from "@/components/Spinner";
 import { mapState } from "vuex";
 import { mapGetters } from "vuex";
 
@@ -104,6 +106,7 @@ export default {
   name: "Sequence",
   components: {
     Navbar,
+    Spinner,
   },
   data() {
     return {
@@ -113,7 +116,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["selectedRoute", "timeOfArrival"]),
+    ...mapState(["isLoading", "selectedRoute", "timeOfArrival"]),
     ...mapGetters([
       "departureRouteSequence",
       "returnRouteSequence",
@@ -276,6 +279,29 @@ main {
     gap: 15px;
     padding: 11px 0;
     cursor: pointer;
+
+    img {
+      animation: waggle 0.6s infinite;
+      animation-direction: alternate;
+    }
+
+    @keyframes waggle {
+      0% {
+        transform: rotate(-10deg);
+      }
+      25% {
+        transform: rotate(-4deg);
+      }
+      50% {
+        transform: rotate(0deg);
+      }
+      75% {
+        transform: rotate(4deg);
+      }
+      100% {
+        transform: rotate(10deg);
+      }
+    }
   }
 
   &-tab:first-child {
