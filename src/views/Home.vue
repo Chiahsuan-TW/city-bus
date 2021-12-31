@@ -46,6 +46,14 @@ import Navbar from "@/components/Navbar";
 import CityCard from "@/components/CityCard";
 import cityList from "./../../public/cities.json";
 import { mapGetters } from "vuex";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+});
 
 export default {
   name: "Home",
@@ -64,7 +72,10 @@ export default {
   methods: {
     getRoutes(cityName) {
       if (!cityName) {
-        alert("plz choose city first");
+        Toast.fire({
+          icon: "warning",
+          title: "請先選擇城市",
+        });
         return;
       }
       this.$store.commit("resetCityRoutes");
@@ -77,11 +88,17 @@ export default {
     },
     getStops(cityName) {
       if (!cityName) {
-        alert("plz choose city first");
+        Toast.fire({
+          icon: "warning",
+          title: "請先選擇城市",
+        });
         return;
       }
       if (cityName === "基隆市" || cityName === "連江縣") {
-        alert("oops! no such info for the selected city");
+        Toast.fire({
+          icon: "error",
+          title: "未提供該縣市站牌查詢服務",
+        });
         return;
       }
       // manually clear the previous data
@@ -156,6 +173,14 @@ main {
     padding-top: 10px;
     height: 50vh;
     overflow: scroll;
+
+    @include breakpoints.tablet {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include breakpoints.desktop {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 }
 
