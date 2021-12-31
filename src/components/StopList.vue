@@ -64,6 +64,7 @@ export default {
   &-title {
     font-size: 23px;
     letter-spacing: 0.1em;
+    color: color.$indigo;
   }
 
   &-detail {

@@ -7,7 +7,6 @@
     </router-link>
     <h2>全台公車整合資訊網</h2>
   </nav>
-  
 </template>
 
 <script>
@@ -22,6 +21,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 24px;
+  background-color: #fff;
 }
 
 h2 {
@@ -31,6 +31,4 @@ h2 {
 .logo {
   font-size: 0;
 }
-
-
 </style>

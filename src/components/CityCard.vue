@@ -37,6 +37,7 @@ export default {
   height: 120px;
   background-color: color.$primary;
   border-radius: 26px;
+  box-shadow: 4px 4px 2px color.$indigo;
 }
 
 .bus-city-card:hover {

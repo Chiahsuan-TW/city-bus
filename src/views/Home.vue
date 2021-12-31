@@ -71,8 +71,8 @@ export default {
       this.$store.dispatch("searchRoutes");
       this.$router.push({
         name: "Search",
-        params: { city: cityName },
         query: { type: "route" },
+        params: { city: cityName },
       });
     },
     getStops(cityName) {
@@ -132,7 +132,8 @@ main {
 .bus {
   background-color: #fff;
   border-radius: 0px 40px 0px 0px;
-  padding: 24px 30px 35px;
+  padding: 35px 30px;
+  height: 70vh;
 
   &-title {
     display: flex;
@@ -180,6 +181,6 @@ section {
 }
 
 .selected {
-  outline: 2px solid color.$indigo;
+  outline: 3px solid color.$indigo;
 }
 </style>
